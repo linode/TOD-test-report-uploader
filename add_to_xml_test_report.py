@@ -4,41 +4,36 @@ import xml.etree.ElementTree as ET
 
 import requests
 
-latest_release_urls = ["https://api.github.com/repos/linode/linode-cli/releases/latest", "https://api.github.com/repos/linode/linode_api4-python/releases/latest", "https://api.github.com/repos/linode/linodego/releases/latest", "https://api.github.com/repos/linode/terraform-provider-linode/releases/latest", "https://api.github.com/repos/linode/packer-plugin-linode/releases/latest"]
+latest_release_urls = {
+    "cli": "https://api.github.com/repos/linode/linode-cli/releases/latest",
+    "sdk": "https://api.github.com/repos/linode/linode_api4-python/releases/latest",
+    "linodego": "https://api.github.com/repos/linode/linodego/releases/latest",
+    "terraform": "https://api.github.com/repos/linode/terraform-provider-linode/releases/latest",
+    "packer": "https://api.github.com/repos/linode/packer-plugin-linode/releases/latest",
+}
 
 
 def get_release_version(file_name):
-    url = ""
-    if 'cli' in file_name:
-        url = latest_release_urls[0]
-    elif 'sdk' in file_name:
-        url = latest_release_urls[1]
-    elif 'linodego' in file_name:
-        url = latest_release_urls[2]
-    elif 'terraform' in file_name:
-        url = latest_release_urls[3]
-    elif 'packer' in file_name:
-        url = latest_release_urls[4]
-    else:
-        "unknown log type"
+    for key, url in latest_release_urls.items():
+        if key in file_name:
+            try:
+                response = requests.get(url)
+                response.raise_for_status()  # Check for HTTP errors
 
-    try:
-        response = requests.get(url)
-        response.raise_for_status()  # Check for HTTP errors
+                release_info = response.json()
+                version = release_info["tag_name"]
 
-        release_info = response.json()
-        version = release_info["tag_name"]
+                # Remove 'v' prefix if it exists
+                if version.startswith("v"):
+                    version = version[1:]
 
-        # Remove 'v' prefix if it exists
-        if version.startswith("v"):
-            version = version[1:]
+                return str(version)
 
-        return str(version)
-
-    except requests.exceptions.RequestException as e:
-        print("Error:", e)
-    except KeyError:
-        print("Error: Unable to fetch release information from GitHub API.")
+            except requests.exceptions.RequestException as e:
+                print("Error:", e)
+            except KeyError:
+                print("Error: Unable to fetch release information from GitHub API.")
+    return "unknown log type"
 
 
 def add_fields_to_xml(branch_name, gha_run_id, gha_run_number, xml_file_path):
