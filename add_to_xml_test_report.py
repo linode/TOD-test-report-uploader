@@ -10,7 +10,7 @@ latest_release_urls = {
     "linodego": "https://api.github.com/repos/linode/linodego/releases/latest",
     "terraform": "https://api.github.com/repos/linode/terraform-provider-linode/releases/latest",
     "packer": "https://api.github.com/repos/linode/packer-plugin-linode/releases/latest",
-    "ansible": "https://github.com/repos/linode/ansible_linode/releases/latest"
+    "ansible": "https://api.github.com/repos/linode/ansible_linode/releases/latest"
 }
 
 
