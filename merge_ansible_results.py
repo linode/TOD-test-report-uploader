@@ -51,5 +51,5 @@ def merge_xml_files(input_dir, output_file):
 # Example usage specific to ansible repository
 input_directory = os.path.join(os.getcwd(), "output/junit")
 current_time = datetime.now()
-output_xml_file = current_time.strftime("%Y%m%d%H%M") + 'ansible_merged_test.xml'
+output_xml_file = current_time.strftime("%Y%m%d%H%M") + '_ansible_merged.xml'
 merge_xml_files(input_directory, output_xml_file)
