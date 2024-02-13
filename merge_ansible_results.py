@@ -27,8 +27,6 @@ def merge_xml_files(input_dir, output_file):
 
             # Iterate through each testcase in the testsuite and add failure message to the merged XML
             for testcase in testsuite.findall('testcase'):
-                new_testcase = ET.SubElement(merged_testsuite, 'testcase')
-                new_testcase.set('name', testsuite.get('name') + ": " + testcase.get('name'))
                 failure = testcase.find('failure')
                 if failure is not None:
                     failure_message = failure.get('message')
@@ -36,6 +34,9 @@ def merge_xml_files(input_dir, output_file):
                     merged_testcase.set('name', testsuite.get('name') + ": " + testcase.get('name'))
                     failure_element = ET.SubElement(merged_testcase, 'failure')
                     failure_element.set('message', failure_message)
+                else:
+                    new_testcase = ET.SubElement(merged_testsuite, 'testcase')
+                    new_testcase.set('name', testsuite.get('name') + ": " + testcase.get('name'))
 
     merged_testsuite.set("failures", str(total_failures))
     merged_testsuite.set("skipped", str(total_skipped))
