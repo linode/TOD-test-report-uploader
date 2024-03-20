@@ -11,8 +11,8 @@ latest_release_urls = {
     "terraform": "https://api.github.com/repos/linode/terraform-provider-linode/releases/latest",
     "packer": "https://api.github.com/repos/linode/packer-plugin-linode/releases/latest",
     "ansible": "https://api.github.com/repos/linode/ansible_linode/releases/latest",
-    "py-metadata": "https://api.github.com/repos/linode/py-metadata/releases/latest",
-    "go-metadata": "https://api.github.com/repos/linode/go-metadata/releases/latest"
+    "py_metadata": "https://api.github.com/repos/linode/py-metadata/releases/latest",
+    "go_metadata": "https://api.github.com/repos/linode/go-metadata/releases/latest"
 }
 
 
