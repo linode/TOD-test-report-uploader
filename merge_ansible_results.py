@@ -2,6 +2,24 @@ from datetime import datetime
 import os
 import xml.etree.ElementTree as ET
 
+
+def clean_up_test_output(test_output):
+    # Find the index of '='
+    test_output = test_output.replace("[testhost] testhost: ", "")
+
+    index = test_output.find("=")
+
+    # If '=' is found
+    if index != -1:
+        # Extract the substring before '='
+        cleaned_output = test_output[:index].strip().replace("that", "")
+    else:
+        # If '=' is not found, return the original string
+        cleaned_output = test_output.strip()
+
+    return cleaned_output
+
+
 def merge_xml_files(input_dir, output_file):
     # Create the root element for the new XML
     merged_testsuites = ET.Element('testsuites')
@@ -31,12 +49,12 @@ def merge_xml_files(input_dir, output_file):
                 if failure is not None:
                     failure_message = failure.get('message')
                     merged_testcase = ET.SubElement(merged_testsuite, 'testcase')
-                    merged_testcase.set('name', testsuite.get('name') + ": " + testcase.get('name'))
+                    merged_testcase.set('name', clean_up_test_output(testcase.get('name')))
                     failure_element = ET.SubElement(merged_testcase, 'failure')
                     failure_element.set('message', failure_message)
                 else:
                     new_testcase = ET.SubElement(merged_testsuite, 'testcase')
-                    new_testcase.set('name', testsuite.get('name') + ": " + testcase.get('name'))
+                    new_testcase.set('name', clean_up_test_output(testcase.get('name')))
 
     merged_testsuite.set("failures", str(total_failures))
     merged_testsuite.set("skipped", str(total_skipped))
