@@ -46,8 +46,8 @@ def merge_xml_files(input_dir, output_file):
             # Iterate through each testcase in the testsuite and add failure message to the merged XML
             for testcase in testsuite.findall('testcase'):
                 testcase_name = clean_up_test_output(testcase.get('name'))
-                if 'Gathering Facts' in testcase_name:
-                    testcase_name = testsuite.get('name') + ": " + testcase_name
+                if any(substring in testcase_name for substring in ['Gathering Facts', 'set_fact']):
+                    continue
                 failure = testcase.find('failure')
                 if failure is not None:
                     failure_message = failure.get('message')
